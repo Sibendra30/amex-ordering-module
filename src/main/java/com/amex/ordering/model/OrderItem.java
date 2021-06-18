@@ -17,10 +17,20 @@ import javax.validation.constraints.NotNull;
 public class OrderItem {
     @NotNull
     private Long itemId;
+
+    private String itemName;
+
     @NotNull
     @Min(value = 1)
     private int qty;
+
     private double amount;
+
+    public OrderItem(Long itemId, int qty, double amount) {
+        this.itemId = itemId;
+        this.qty = qty;
+        this.amount = amount;
+    }
 
     @SneakyThrows
     public OrderItem clone() {

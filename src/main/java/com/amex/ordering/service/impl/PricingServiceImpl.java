@@ -7,6 +7,8 @@ import com.amex.ordering.repository.CatalogRepository;
 import com.amex.ordering.service.PricingService;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -27,7 +29,7 @@ public class PricingServiceImpl implements PricingService {
             CatalogItem catalogItem = catalogRepository.getCatalogItemById(item.getItemId());
             double orderItemTotal = calculatePriceWithOffer(item.getQty(), catalogItem);
             totalOrderAmount[0] = totalOrderAmount[0] + orderItemTotal;
-           return new OrderItem(item.getItemId(), item.getQty(), orderItemTotal);
+           return new OrderItem(item.getItemId(), catalogItem.getName(), item.getQty(), orderItemTotal);
         }).collect(Collectors.toSet());
         order.setItems(orderItems);
         order.setTotalAmount(totalOrderAmount[0]);
@@ -35,7 +37,7 @@ public class PricingServiceImpl implements PricingService {
     }
 
     protected double calculatePriceWithOffer(int qty, CatalogItem catalogItem) {
-        double amount = 0;
+        double amount;
         if (catalogItem.getOffers() != null) {
             int productWithOffer = qty / catalogItem.getOffers().getOfferItemCount();
             int productWithoutOffer = qty % catalogItem.getOffers().getOfferItemCount();
@@ -43,6 +45,13 @@ public class PricingServiceImpl implements PricingService {
                     + productWithoutOffer * catalogItem.getRate();
         } else {
             amount = qty * catalogItem.getRate();
+        }
+        try {
+            DecimalFormat df = new DecimalFormat("0.00");
+            String formattedValue = df.format(amount);
+            amount = (Double) df.parse(formattedValue);
+        } catch (ParseException e) {
+           throw new RuntimeException("Parsing error");
         }
         return amount;
     }
