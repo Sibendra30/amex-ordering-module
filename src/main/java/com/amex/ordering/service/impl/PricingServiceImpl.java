@@ -24,12 +24,26 @@ public class PricingServiceImpl implements PricingService {
 
         final double[] totalOrderAmount = {0};
         orderItems = orderItems.stream().map(item -> {
-           double orderItemTotal = catalogRepository.getCatalogItemById(item.getItemId()).getRate() * item.getQty();
+            CatalogItem catalogItem = catalogRepository.getCatalogItemById(item.getItemId());
+            double orderItemTotal = calculatePriceWithOffer(item.getQty(), catalogItem);
             totalOrderAmount[0] = totalOrderAmount[0] + orderItemTotal;
            return new OrderItem(item.getItemId(), item.getQty(), orderItemTotal);
         }).collect(Collectors.toSet());
         order.setItems(orderItems);
         order.setTotalAmount(totalOrderAmount[0]);
         return order;
+    }
+
+    protected double calculatePriceWithOffer(int qty, CatalogItem catalogItem) {
+        double amount = 0;
+        if (catalogItem.getOffers() != null) {
+            int productWithOffer = qty / catalogItem.getOffers().getOfferItemCount();
+            int productWithoutOffer = qty % catalogItem.getOffers().getOfferItemCount();
+            amount = productWithOffer * catalogItem.getOffers().getOfferItemPayFor() * catalogItem.getRate()
+                    + productWithoutOffer * catalogItem.getRate();
+        } else {
+            amount = qty * catalogItem.getRate();
+        }
+        return amount;
     }
 }

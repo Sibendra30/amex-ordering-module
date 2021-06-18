@@ -4,15 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CatalogItem {
+public class Offer {
     private Long id;
-    private String name;
-    private String description;
-    private Double rate;
-    private Offer offers;
+    private String offerType;
+    private int offerItemCount;
+    private int offerItemPayFor;
 }
