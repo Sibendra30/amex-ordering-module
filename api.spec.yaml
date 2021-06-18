@@ -1,0 +1,90 @@
+openapi: 3.0.1
+info:
+  title: Amex Ordering APIs
+  description: This document contains the APIs specific for ordering.
+  version: v0
+servers:
+  - url: http://localhost:8081
+    description: Generated server url
+paths:
+  /order:
+    post:
+      tags:
+        - Ordering
+      description: This endpoint will help to create the order with itemId and their quantity. Also returns back the order summary including the order amount in response.
+      operationId: createOrder
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+        "201":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+components:
+  schemas:
+    Item:
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        description:
+          type: string
+        rate:
+          type: number
+          format: double
+    
+    OrderItem:
+      properties:
+        item:
+          $ref: '#/components/schemas/Item'
+        qty:
+          type: number
+        amount:
+          type: number
+          format: double
+        tax:
+          type: number
+          format: double
+          
+    Order:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          type: number
+        customerId:
+          type: number
+        amount:
+          type: number
+          format: double
+        tax:
+          type: number
+          format: double
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+    
+    Error:
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        
