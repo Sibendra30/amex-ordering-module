@@ -6,6 +6,8 @@ import com.amex.ordering.service.OrderService;
 import com.amex.ordering.service.PricingService;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -22,4 +24,15 @@ public class OrderServiceImpl implements OrderService {
         Order orderWithPricing = pricingService.populateOrderingPrices(order);
         return orderRepository.save(orderWithPricing);
     }
+
+    @Override
+    public Set<Order> getAllOrder() {
+        return orderRepository.findAllOrders();
+    }
+
+    @Override
+    public Order getOrderById(Long orderId) {
+        return orderRepository.findOrderById(orderId);
+    }
+
 }
