@@ -5,8 +5,18 @@ This is a Java-Springboot based project containing APIs to create order, view al
 
 ## API Details
 1. *POST /order* - This API will create the order and return s the order details with orderId, item details and pricing information.
+Sample Request Body:
+`{"customerId":"1234","items":[{"itemId":1001,"qty":5}]}`
+
+Sample Response Body:
+`{"id":10000,"customerId":1234,"items":[{"itemId":1001,"itemName":"Apple","qty":5,"amount":1.8}],"totalAmount":1.8}`
+
 2. *GET /order* - This API will return all the orders with item details and pricing information.
+Sample Response Body:
+`[{"id":10000,"customerId":1234,"items":[{"itemId":1001,"itemName":"Apple","qty":5,"amount":1.8}],"totalAmount":1.8},{"id":10001,"customerId":1234,"items":[{"itemId":1001,"itemName":"Apple","qty":7,"amount":2.4}],"totalAmount":2.4}]`
 3. *GET /order/{orderId}* - This API will return the order with given order Id with item details and pricing information.
+Sample Response Body:
+`{"id":10000,"customerId":1234,"items":[{"itemId":1001,"itemName":"Apple","qty":5,"amount":1.8}],"totalAmount":1.8}`
 
 ** Please refer to api.spec.yaml for more details.
 
