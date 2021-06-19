@@ -10,7 +10,6 @@ import com.amex.ordering.service.PricingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Collections;
@@ -43,6 +42,7 @@ class PricingServiceImplTest {
         OrderItem expectedOrderItemWithPricing = TestUtil.getDummyOrderItemReq();
         expectedOrderItemWithPricing.setQty(3);
         expectedOrderItemWithPricing.setAmount(1.2);
+        expectedOrderItemWithPricing.setItemName("Apple");
         orderWithPricing.setItems(new HashSet<>(Collections.singletonList(expectedOrderItemWithPricing)));
         orderWithPricing.setTotalAmount(1.2);
 
